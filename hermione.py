@@ -23,7 +23,7 @@ class Intents(Enum):
 GREETINGS = ['Hello there, my name is Hermione.']
 RESPONSE_NOT_QUESTION = ['I\'m sorry but that is simply not a question!']
 SPELLING_ERROR = ['It\'s \%s not \%s!']
-
+NAGGING = ['I really shouldn\'t be doing this.', 'I told you that was a bad idea.']
 
 ### CORE FUNCTIONALITY ###
 
