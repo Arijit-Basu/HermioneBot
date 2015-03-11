@@ -20,9 +20,10 @@ class Intents(Enum):
 	UNKNOWN = 3
 
 ## Pre-defined responses to statements and undecipherable user questions
-GREETINGS = ['Hello there, my name is Hermione']
-RESPONSE_NOT_QUESTION = ['']
-SPELLING_ERROR = ['It\'s \%s not \%s']
+GREETINGS = ['Hello there, my name is Hermione.']
+RESPONSE_NOT_QUESTION = ['I\'m sorry but that is simply not a question!']
+SPELLING_ERROR = ['It\'s \%s not \%s!']
+
 
 ### CORE FUNCTIONALITY ###
 
