@@ -2,6 +2,7 @@ from enum import Enum
 import json
 import urllib
 import nltk
+import pyjs
 
 ### CONSTANTS & HELPER CLASSES ###
 
@@ -25,6 +26,7 @@ RESPONSE_NOT_QUESTION = ['I\'m sorry but that is simply not a question!']
 SPELLING_ERROR = ['It\'s \%s not \%s!']
 NAGGING = ['I really shouldn\'t be doing this.', 'I told you that was a bad idea.']
 
+
 ### CORE FUNCTIONALITY ###
 
 ## GUI ## 
@@ -35,21 +37,25 @@ NAGGING = ['I really shouldn\'t be doing this.', 'I told you that was a bad idea
 ##
 ##
 ##
-def buildHermione() :
+class Hermione:
+	def onModuleLoad(self):
+		hermioneOutput = 
+		userInput = 
+		RootPanel().add(hermioneOutput, userInput)
 
 ##
 ##
 ##
 ##
-def chat() :
+def handleUserInput() :
 
 
 ##
 ##
 ##
 ## 
-def shutdownHermione() :
-
+def printOutput() :
+	
 
 ## LINGUISTIC UNDERSTANDING ##
 ## Section which takes the user's input and deciphers the user's intention
