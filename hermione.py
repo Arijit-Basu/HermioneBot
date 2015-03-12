@@ -11,7 +11,7 @@ import pyjs
 
 
 ## General UI Constants
-hermione = HermioneGUI()
+hermione = HermioneUI()
 TITLE = 'Hermione Bot'
 SUBTITLE = ''
 userName = ''
@@ -52,7 +52,7 @@ DEFAULT_RESPONSE = ''
 
 ##
 ##
-class HermioneInputBox(TextBox):
+class InputBox(TextBox):
 
 	## 
 	##
@@ -69,7 +69,7 @@ class HermioneInputBox(TextBox):
 
 ##
 ##
-class HermioneGUI():
+class HermioneUI():
 	
 	##
 	##
@@ -82,7 +82,7 @@ class HermioneGUI():
 		hermioneOutput.setReadonly(True)
 		hermioneOutput.setVisibleLength('1000px')
 		hermioneOutput.setWidth('500px')
-		userInput = HermioneInputBox()
+		userInput = InputBox()
 		userInput.setText("")
 		userInput.setVisisbleLength('200px')
 		userInput.setWidth('500px')
@@ -114,20 +114,22 @@ def submitInput(input):
 
 	hermione.hermioneOutput.addText(response)
 
-##
+## TODO
 ##
 def obtainUserIntent(input):
+	pass
 
-##
+## TODO
 ##
 def deviseResponse(query):
+	pass
 
 
 ## API INTERFACING ##
 ## Section which provides the methods necessary to interface with the wikia API
 ## Includes querying for article suggestions and optaining articles all in json format
 
-##
+## TODO
 ##
 def queryWikia(query):
 
@@ -135,9 +137,13 @@ def queryWikia(query):
 	encodedQuery = urllib.urlencode(SEARCH_QUERY_TEMPLATE)
 	result = json.load(URL + query.encode('utf-8'))	
 
-##
+	## TODO: determine how to handle multiple query results
+
+## TODO
 ##
 def refineWikiaArticleContent():
+	pass
+
 
 ##
 ##
