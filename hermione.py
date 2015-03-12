@@ -1,8 +1,10 @@
+from pyjamas.ui.TextBox import TextBox
+from pyjamas.ui.Label import Label
+from pyjamas.ui.RootPanel import RootPanel
 import json
 import urllib
 import nltk
 import pyjs
-from pyjamas.ui import usedUIComponents
 
 
 ### CONSTANTS & HELPER CLASSES ###
@@ -14,7 +16,6 @@ TITLE = 'Hermione Bot'
 SUBTITLE = ''
 userName = ''
 isFirstInteraction = True
-usedUIComponents = ['TextBox', 'RootPanel', 'Label']
 
 
 ## General URL API constants
@@ -60,7 +61,7 @@ class HermioneInputBox(TextBox):
 			self.setReadonly(True)
 			submitInput(self.getText())
 			self.setReadonly(False)
-			resetText(self)
+			self.resetText()
 	##
 	##		
 	def resetText(self):
@@ -115,11 +116,11 @@ def submitInput(input):
 
 ##
 ##
-def obtainUserIntent(input) :
+def obtainUserIntent(input):
 
 ##
 ##
-def deviseResponse(query) :
+def deviseResponse(query):
 
 
 ## API INTERFACING ##
@@ -128,7 +129,7 @@ def deviseResponse(query) :
 
 ##
 ##
-def queryWikia(query) :
+def queryWikia(query):
 
 	SEARCH_QUERY_TEMPLATE['query'] = query
 	encodedQuery = urllib.urlencode(SEARCH_QUERY_TEMPLATE)
@@ -136,10 +137,10 @@ def queryWikia(query) :
 
 ##
 ##
-def refineWikiaArticleContent() :
+def refineWikiaArticleContent():
 
 ##
 ##
 if __name__ == '__main__' :
-		hermione.onModuleLoad
+	hermione.onModuleLoad()
 
