@@ -1,22 +1,18 @@
-from pyjamas.ui.TextBox import TextBox
-from pyjamas.ui.Label import Label
-from pyjamas.ui.RootPanel import RootPanel
 import json
 import urllib
 import nltk
-import pyjs
-
+import random
+import Tkinter
+from Tkinter import *
+from PIL import Image, ImageTk
 
 ### CONSTANTS & HELPER CLASSES ###
 
-
 ## General UI Constants
-hermione = HermioneUI()
-TITLE = 'Hermione Bot'
-SUBTITLE = ''
+TITLE = 'HermioneBot'
 userName = ''
 isFirstInteraction = True
-
+background_image = Image.open('hermione.jpg')
 
 ## General URL API constants
 WIKIA_API_URL = 'https://www.harrypotter.wikia.com/api/v1'
@@ -26,16 +22,15 @@ QUERY_RESULT_LIMIT = 25
 SEARCH_QUERY_TEMPLATE = {'query' : '', 'limit' : QUERY_RESULT_LIMIT}
 ARTICLE_QUERY_TEMPLATE = {'id': ''}
 
-
 ## Helper classes and constants for linguistic computations
 class Intent:
 	QUERY = 1
 	STATEMENT = 2
 	UNKNOWN = 3
-
+	DEVIOUS = 4
 
 ## Pre-defined responses to statements and undecipherable user questions
-GREETING = 'Hello, I\'m Hermione Granger and you are?'
+GREETING = 'I\'m Hermione Granger and you are?'
 WELCOME = 'Pleasure.'
 RESPONSE_NOT_QUESTION = ['I\'m sorry but that is simply not a question!']
 SPELLING_ERROR = ['It\'s \%s not \%s!']
@@ -52,44 +47,34 @@ DEFAULT_RESPONSE = ''
 
 ##
 ##
-class InputBox(TextBox):
+class HermioneUI:
 
-	## 
 	##
-	def onKeyPress(self, sender, keycode, modifiers): 
-		if (keycode == KEY_ENTER):
-			self.setReadonly(True)
-			submitInput(self.getText())
-			self.setReadonly(False)
-			self.resetText()
 	##
-	##		
-	def resetText(self):
-		self.setText('')
+	def __init__(self):
 
-##
-##
-class HermioneUI():
-	
-	##
-	##
-	def onModuleLoad(self):
-		title = Label().setText(TITLE)
-		title.setText(TITLE)
-		hermioneOutput = TextBox()
-		hermioneOutput.setText(GREETING)
-		hermioneOutput.setStyleName('hermione-output-box')
-		hermioneOutput.setReadonly(True)
-		hermioneOutput.setVisibleLength('1000px')
-		hermioneOutput.setWidth('500px')
-		userInput = InputBox()
-		userInput.setText("")
-		userInput.setVisisbleLength('200px')
-		userInput.setWidth('500px')
-		userInput.addInputListener(UserInputListener())
-		userInput.setStyleName('user-input-box')
-		mainPanel = RootPanel().add(hermioneOutput, userInput)
-		mainPanel.setSpacing(15)
+		# Basic GUI & Layout initialization 
+		gui = Tkinter.Tk()
+		gui.title(TITLE)
+
+		# Set Background
+		background = ImageTk.PhotoImage(background_image)
+		background_label = Tkinter.Label(gui, image=background)
+		background_label.place(x=0, y=0, relwidth=1, relheight=1)
+		gui.wm_geometry("1250x685+20+40")
+
+		# Response Text Area
+		response = StringVar()
+		responseLabel = Label(gui, textvariable=response, anchor='nw', font=("Helvetica", 20), bg='white', fg='black', wraplength=200)
+		response.set(GREETING)
+		responseLabel.place(x=930, y=125, relwidth=.175, relheight=.35)	
+
+		# User Text Area
+		userEntry = Text(gui, font=("Helvetica", 16), bg='white', bd=0, highlightcolor="white", fg='black')
+		userEntry.place(x=950, y=525, relwidth=.15, relheight=.1)
+		submitQuestion = Button(gui, text="Ask Hermione", command= lambda: submitInput(userEntry, response))
+		submitQuestion.place(x=985, y=600)
+		gui.mainloop()
 
 
 ## LINGUISTIC UNDERSTANDING ##
@@ -98,26 +83,32 @@ class HermioneUI():
 
 ##
 ##
-def submitInput(input):
+def submitInput(userEntry, systemResponse):
+	userInput = userEntry.get(0.0, END)
+	print(userInput)
 	response = DEFAULT_RESPONSE
 
 	if isFirstInteraction :
-		userName = userText
+		global userName
+		global isFirstInteraction
+		userName = userInput.rstrip('\n')
 		response = WELCOME
 		isFirstInteraction = False
 	else :
-		intent = obtainUserIntent(userText)
+		intent = obtainUserIntent(userInput)
 		if intent == Intent.QUERY :
-			response = deviseResponse(userText)
+			response = deviseResponse(userInput)
 		elif intent == Intent.STATEMENT :
-			response = DEFAULT_RESPONSE		
+			response = "%s, %s" % (userName, RESPONSE_NOT_QUESTION[random.randint(0, len(RESPONSE_NOT_QUESTION)-1)])
+		
+		# User's Intent DEVIOUS
 
-	hermione.hermioneOutput.addText(response)
+	systemResponse.set(response)
 
 ## TODO
 ##
 def obtainUserIntent(input):
-	pass
+	return Intent.STATEMENT
 
 ## TODO
 ##
@@ -135,7 +126,7 @@ def queryWikia(query):
 
 	SEARCH_QUERY_TEMPLATE['query'] = query
 	encodedQuery = urllib.urlencode(SEARCH_QUERY_TEMPLATE)
-	result = json.load(URL + query.encode('utf-8'))	
+	result = json.loads(URL + query.encode('utf-8'))	
 
 	## TODO: determine how to handle multiple query results
 
@@ -144,9 +135,9 @@ def queryWikia(query):
 def refineWikiaArticleContent():
 	pass
 
-
 ##
 ##
 if __name__ == '__main__' :
-	hermione.onModuleLoad()
+	HermioneUI()
+
 
