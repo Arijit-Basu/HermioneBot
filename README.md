@@ -32,8 +32,14 @@ The application remembers the username and uses it when replying in certain scen
 If the question does not either start with WH-word or end with a ? then the application will assume the input as nonsensical.
 Statements will be handled for the final submission.
 
-###Happy Path: 
+### Happy Path: 
+1. Enter name > Click "Reply"
+2. Ask one of the following questions (on loop):
 "Who is Hermione Granger?" 
 "Who is Harry?"
 "What is Hogwarts?"
-"What is herbology" 
+"What is herbology?"
+"What are the houses at Hogwarts?" 
+"What was the battle of Hogwarts?"
+"What's a muggle?"
+
