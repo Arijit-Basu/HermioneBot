@@ -24,4 +24,16 @@ to download: run python
 >> import nltk
 >> nltk.download()
 
-- this will open a gui application where you will be able to select the packages to install, they will download to the directory: /Users/<your_user>/nltk_data 
+- this will open a gui application where you will be able to select the packages to install, they will download to the directory: /Users/<your_user>/nltk_data
+
+## Submission #1 
+The bot currently handles only simple question queries such as Who/What is/are <NP>.
+The application remembers the username and uses it when replying in certain scenarios.
+If the question does not either start with WH-word or end with a ? then the application will assume the input as nonsensical.
+Statements will be handled for the final submission.
+
+###Happy Path: 
+"Who is Hermione Granger?" 
+"Who is Harry?"
+"What is Hogwarts?"
+"What is herbology" 
