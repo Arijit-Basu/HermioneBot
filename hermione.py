@@ -4,6 +4,7 @@ import urllib
 import urllib2
 
 ## Resources for performing POS tagging & lamda expressions
+from nltk.parse import ShiftReduceParser
 from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize, sent_tokenize
 
@@ -18,8 +19,6 @@ import random
 
 
 ### CONSTANTS & HELPER CLASSES ###
-
-## NLTK Resources
 
 ## General UI Constants
 TITLE = 'HermioneBot'
@@ -86,8 +85,8 @@ class HermioneUI:
 		# User Text Area
 		userEntry = Text(gui, font=("Helvetica", 16), bg='white', bd=0, highlightcolor="white", fg='black')
 		userEntry.place(x=950, y=525, relwidth=.15, relheight=.1)
-		submitQuestion = Button(gui, text="Ask Hermione", command= lambda: submitInput(userEntry, response))
-		submitQuestion.place(x=985, y=600)
+		submitButton = Button(gui, text="Reply", command= lambda: submitInput(userEntry, response, submitButton))
+		submitButton.place(x=985, y=600)
 		gui.mainloop()
 
 
@@ -97,7 +96,7 @@ class HermioneUI:
 
 ##
 ##
-def submitInput(userEntry, systemResponse):
+def submitInput(userEntry, systemResponse, submitButton):
 	userInput = userEntry.get(0.0, END).rstrip('\n')
 	
 	## TEMP: to see & verify POS tagging
@@ -116,6 +115,7 @@ def submitInput(userEntry, systemResponse):
 		userName = userInput
 		response = WELCOME
 		isFirstInteraction = False
+		submitButton.config(text='Ask Hermione')
 
 	# Otherwise - determine the user's intent based one POS tagged sentence 
 	# and devise an answer, rebuttle or appropriate reply
@@ -138,18 +138,40 @@ def submitInput(userEntry, systemResponse):
 
 ## TODO
 ##
-def obtainUserIntent(taggedInput):	
+def obtainUserIntent(taggedInput):
+
+	intent = Intent.NONSENSE	
+
+	## If the sentence ends with a question mark or starts with a Wh-pronoun or adverb
+	## then safely assume it is a question
+	if isQuestion(taggedInput):
+		intent = Intent.QUERY
+
+	else :
+		intent = Intent.STATEMENT
+
+	return intent
+
+## TODO
+##
+def isQuestion(taggedInput):
 
 	## Helper Information
 	firstWordTag = taggedInput[0][1]
 	lastToken = taggedInput[len(taggedInput)-1][0]
 
-	## If the sentence ends with a question mark or starts with a Wh-pronoun or adverb
-	## then safely assume it is a question
-	if (firstWordTag.startswith('WP') or (firstWordTag.startswith('WRB') or lastToken == '?')):
-		return Intent.QUERY
+	# If starts with WH or ends with ? -- it is a question
+	if firstWordTag.startswith('WP') or (firstWordTag.startswith('WRB') or lastToken == '?'):
+		return True
 
-	return Intent.NONSENSE
+	return False
+
+## TODO
+##
+def isStatement(taggedInput):
+	pass
+
+
 
 ## TODO
 ##
@@ -157,9 +179,16 @@ def deviseAnswer(taggedInput):
 
 	# Answer to reply with 
 	answer = NO_INFORMATION_AVAILABLE
-
-	# Refine query picking out  
-	query = 'Harry Potter'
+	
+	# TEMP: Find the noun after the verb - handles who/what is/are ... 
+ 	foundVerb = False
+	query = ''
+	for item in taggedInput:
+		if item[1].startswith('V') and not foundVerb :
+			foundVerb = True
+		elif foundVerb and not item[1] == '.':
+			query += ' '
+			query += item[0]
 
 	# First query wikia to get possible matching articles
 	articleID = queryWikiaSearch(query)
@@ -202,6 +231,7 @@ def queryWikiaSearch(query):
 	if resultData['total'] > 0 :
 		articleID = resultData['items'][0]['id']
 
+	print(articleID)
 	return articleID
 
 ## TODO
@@ -219,6 +249,7 @@ def queryWikiaArticle(articleID):
 	# Open URL and fetch json response text
 	results = urllib2.urlopen(articleUrl)
 	resultData = json.load(results)
+	print(resultData)
 
 	# TODO: Optimize answer refinement
 	# Right now - just fetches first sentence of first section of text

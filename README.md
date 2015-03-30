@@ -15,7 +15,7 @@ url: https://www.harrypotter.wikia.com/api/v1
 This project is being build for a linguistics course at McGill University LING 550 - Computational Linguistics.
 
 ## Dependencies
-python 
+python 2.7.6+ 
 nltk
 nltk.data - Treebank Part of Speech Tagger (Maximum entropy) 
 	  - Punkt Tokenizer Models
