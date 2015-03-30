@@ -15,16 +15,18 @@ url: https://www.harrypotter.wikia.com/api/v1
 This project is being build for a linguistics course at McGill University LING 550 - Computational Linguistics.
 
 ## Dependencies
-python 2.7.6+ 
-nltk
-nltk.data - Treebank Part of Speech Tagger (Maximum entropy) 
-	  - Punkt Tokenizer Models
+- python 2.7.6+ 
+- nltk
+- nltk.data 
+- Treebank Part of Speech Tagger (Maximum entropy) 
+- Punkt Tokenizer Models
 
-to download: run python
->> import nltk
->> nltk.download()
+to download: 
+1. run python
+2. import nltk
+3. nltk.download()
 
-- this will open a gui application where you will be able to select the packages to install, they will download to the directory: /Users/<your_user>/nltk_data
+This will open a gui application where you will be able to select the packages to install, they will download to the directory: /Users/<your_user>/nltk_data
 
 ## Submission #1 
 The bot currently handles only simple question queries such as Who/What is/are <NP>.
@@ -35,11 +37,11 @@ Statements will be handled for the final submission.
 ### Happy Path: 
 1. Enter name > Click "Reply"
 2. Ask one of the following questions (on loop):
-"Who is Hermione Granger?" 
-"Who is Harry?"
-"What is Hogwarts?"
-"What is herbology?"
-"What are the houses at Hogwarts?" 
-"What was the battle of Hogwarts?"
-"What's a muggle?"
+- "Who is Hermione Granger?" 
+- "Who is Harry?"
+- "What is Hogwarts?"
+- "What is herbology?"
+- "What are the houses at Hogwarts?" 
+- "What was the battle of Hogwarts?"
+- "What's a muggle?"
 
