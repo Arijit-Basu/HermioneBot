@@ -26,17 +26,17 @@ This project is being build for a linguistics course at McGill University LING 5
 2. import nltk
 3. nltk.download()
 
-This will open a gui application where you will be able to select the packages to install, they will download to the directory: /Users/<your_user>/nltk_data
+This will open a gui application where you will be able to select the packages to install, they will download to the directory: /Users/your_user/nltk_data
 
 ## Submission #1 
 The bot currently handles only simple question queries such as Who/What is/are <NP>.
 The application remembers the username and uses it when replying in certain scenarios.
-If the question does not either start with WH-word or end with a ? then the application will assume the input as nonsensical.
+If the question does not either start with WH-word or end with a '?' then the application will assume the input as nonsensical.
 Statements will be handled for the final submission.
 
 ### Happy Path: 
 1. Enter name > Click "Reply"
-2. Ask one of the following questions (on loop):
+2. Ask one of the following (or similar) questions (on loop):
 	- "Who is Hermione Granger?" 
 	- "Who is Harry?"
 	- "What is Hogwarts?"
