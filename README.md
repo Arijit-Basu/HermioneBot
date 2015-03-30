@@ -21,7 +21,7 @@ This project is being build for a linguistics course at McGill University LING 5
 - Treebank Part of Speech Tagger (Maximum entropy) 
 - Punkt Tokenizer Models
 
-to download: 
+### To Download: 
 1. run python
 2. import nltk
 3. nltk.download()
@@ -37,11 +37,11 @@ Statements will be handled for the final submission.
 ### Happy Path: 
 1. Enter name > Click "Reply"
 2. Ask one of the following questions (on loop):
-- "Who is Hermione Granger?" 
-- "Who is Harry?"
-- "What is Hogwarts?"
-- "What is herbology?"
-- "What are the houses at Hogwarts?" 
-- "What was the battle of Hogwarts?"
-- "What's a muggle?"
+	- "Who is Hermione Granger?" 
+	- "Who is Harry?"
+	- "What is Hogwarts?"
+	- "What is herbology?"
+	- "What are the houses at Hogwarts?" 
+	- "What was the battle of Hogwarts?"
+	- "What's a muggle?"
 
