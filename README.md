@@ -45,3 +45,41 @@ Statements will be handled for the final submission.
 	- "What was the battle of Hogwarts?"
 	- "What's a muggle?"
 
+## Final Submission
+
+### Features
+	- Determine user intent based on syntax of POS-tagged input text: QUERY or UNKNOWN
+		- if UNKNONWN performs spell check before returning a response
+		- if QUERY:
+			- perform parse on POS-tagged input text to select a set of queries to enter into wikia and additional keywords to help refine solution
+			- parse uses a technique known as NP-chunking based on a small grammar used to detect simple NP segments in the input
+			- fetches relevant articleIDs for all query input and then searches through the sentences in the text
+			- the sentences are scored based on appearance of relevant search terms (queries and keywords)
+			- most probable 1 or 2 sentences are returned
+			- if no results based on query (rare, but happens) then performs spell check before returning a response
+	- Spell Checker:
+		-  
+### Happy Path:
+1. Enter name > Click "Reply"
+2. Ask a question adhering to the following syntax (as provided by the Penn Treebank POS tagger):
+	- Any phrase ending in a question mark '?':
+		- TRY ON THESE EXAMPLES: 
+			- ''
+			- ''
+	- Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)), Whose)
+		- TRY ON THESE EXAMPLES:
+			- ''
+	- Any phrase ending in a WH-pronoun:
+		- TRY ON THESE EXAMPLES:
+			- ''
+	- Any phrase starting with a singular present verb or modal (Is, Does, Are, Can, Could, Should, Would, Were, Was, etc...)
+		- TRY ON THESE EXAMPLES:
+			- '' 
+3. Type in nonsensical phrase or a statement-like sentence:
+	- "I like to brush my teeth"
+	- "
+4. Type in a question or statement with an incorrectly spelled HP-specific spell/ or character name:
+	- "What is quiddich?"
+	- 
+
+NOTE: This is a largely probabilistic model which doesn't always obtain optimal results, for many queries, where there exists a wikia article containing a high occurence of relevant information/keywords based on that query, it will return the answer or related information.  However, this does not always happen.  The problem space is very large and there are many more optimizations and refinements that could be made to improve the system. Although, given the time and resource constraint I am satisfied with what I've been able to achieve and learn from this project. 
