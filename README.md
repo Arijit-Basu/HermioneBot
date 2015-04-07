@@ -72,6 +72,8 @@ Statements will be handled for the final submission.
 			- 'Who's Cedric?'
 			- 'When did Bellatrix escape from Azkaban?'
 			- 'Who is the love of Hermione's life?'
+			- 'Who is Parvati?'
+			- 'What is the Yule Ball?'
 	- Any phrase ending in a WH-pronoun:
 		- EXAMPLES:
 			- ''

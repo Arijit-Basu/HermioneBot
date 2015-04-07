@@ -53,7 +53,7 @@ WELCOME = 'Pleasure.'
 RESPONSE_TO_NONSENSE = ['I\'m sorry but that is simply not a question!', 'Is that a real question. Well it\'s not very good now is it?', 'Honestly %s, that is not funny, you\'re lucky I don\'t report you to the headmaster' % userName, 'I hope you\'re pleased with yourself. We could have all been killed, or worse... expelled!']
 SPELLING_ERROR = 'It\'s %s, not %s!'
 MUST_ENTER_INPUT = 'It appears you haven\'t asked a question. How do you expect me to perform any magic without a question?'
-NO_INFORMATION_AVAILABLE = 'Even Hogwarts a History couldn\'t answer that question. Perhaps try a different question.'
+NO_INFORMATION_AVAILABLE = 'Even \"Hogwarts: A History\" couldn\'t answer that question. Perhaps try a different question.'
 
 ### CORE FUNCTIONALITY ###
 
@@ -186,7 +186,7 @@ def isQuestion(taggedInput):
 def deviseAnswer(taggedInput):
 
 	# Before querying the wiki -- perform spell check!
-	for word in [word for word in taggedInput if len(word[0]) > 4]:
+	for word in [word for word in taggedInput if len(word[0]) > 3 and (word[1].startswith('N') or word[1].startswith('J') or word[1].startswith('V'))]:
 		correctSpelling = spellCheck(word[0])
 		if not correctSpelling == word[0]:
 			return SPELLING_ERROR % (correctSpelling, word[0])
@@ -287,7 +287,7 @@ def spellCheck(word):
 		return correctSpelling
 	return 
 
-## The following code was taken from norvig.com/spell-correct.html
+## The following code was based off norvig.com/spell-correct.html
 ## written by Peter Norvig explaining how Google spell check performs fast and efficient spell checking
 ## hp-lexicon.txt --- Harry Potter vocabulary file with correct spellings of HP spells, made-up words and character names
 ##
@@ -442,7 +442,8 @@ def refineWikiaArticleContent(specificQuery, articleData, queries, searchRefinem
 	else:
 		return ['', 0]
 
-##
+
+## Main method --- starting point of program, initializes Bot
 ##
 if __name__ == '__main__' :
 	HermioneUI()
