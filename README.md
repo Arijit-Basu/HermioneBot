@@ -68,17 +68,21 @@ Statements will be handled for the final submission.
 			- ''
 	- Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)), Whose)
 		- EXAMPLES:
-			- ''
+			- 'What is Harry Potter known for?'
+			- 'Who's Cedric?'
+			- 'When did Bellatrix escape from Azkaban?'
+			- 'Who is the love of Hermione's life?'
 	- Any phrase ending in a WH-pronoun:
 		- EXAMPLES:
 			- ''
 	- Any phrase starting with a singular present verb or modal (Is, Does, Are, Can, Could, Should, Would, Were, Was, etc...)
 		- EXAMPLES:
+			- 'Is Hufflepuff the kindest house?'
 			- '' 
 3. Type in nonsensical phrase or a statement-like sentence to receive Hermione-like remark
 4. Type in a question or statement with an incorrectly spelled HP-specific spell/ or character name:	
-	- 'What is quiddich?'
-	- '' 
+	- 'What is quiddich?' -> 'It's Quidditch, not quiddich!
+	- 'Who is Professor Quirel?' -> 'It's Quirrel, not Quirel!' 
 
 ### Remarks
 This is a largely probabilistic model which doesn't always obtain optimal results, for many queries, where there exists a wikia article containing a high occurence of relevant information/keywords based on that query, it will return the answer or related information.  However, this does not always happen.  The problem space is very large and there are many more optimizations and refinements that could be made to improve the system. Although, given the time and resource constraint I am satisfied with what I've been able to achieve and learn from this project. 

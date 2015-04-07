@@ -1,7 +1,5 @@
 ## Resources for querying API and parsing results
-import json
-import urllib
-import urllib2
+import re, collections, json, urllib, urllib2, random
 
 ## Resources for performing POS tagging & lamda expressions
 from nltk import RegexpParser
@@ -13,10 +11,6 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 import Tkinter
 from Tkinter import *
 from PIL import Image, ImageTk
-
-## General Resources
-import random
-
 
 
 ### CONSTANTS & HELPER CLASSES ###
@@ -44,9 +38,11 @@ class Intent:
 
 grammar = r"""
 	NP: {<DT|PRP\$>?<JJ>*<NN|NNS>+}
-		{<NNP>+}
+		{<NNP|NNPS><IN><NNP|NNPS>}
+		{<NNP|NNPS>+}
 		{<PRP>}
-		{<WP|WP\$|WRB>}
+		{<JJ>+}
+		{<WP|WP\s$|WRB>}
 	VP: {<VB|VBD|VBG|VBN|VBP|VBZ|MD><NP|IN>?}
 """
 parser = RegexpParser(grammar)
@@ -54,11 +50,10 @@ parser = RegexpParser(grammar)
 ## Pre-defined responses to statements and undecipherable user questions
 GREETING = 'I\'m Hermione Granger and you are?'
 WELCOME = 'Pleasure.'
-RESPONSE_TO_NONSENSE = ['I\'m sorry but that is simply not a question!']
-SPELLING_ERROR = ['It\'s \%s not \%s!']
-MUST_ENTER_INPUT = ''
-NO_INFORMATION_AVAILABLE = ''
-
+RESPONSE_TO_NONSENSE = ['I\'m sorry but that is simply not a question!', 'Is that a real question. Well it\'s not very good now is it?', 'Honestly %s, that is not funny, you\'re lucky I don\'t report you to the headmaster' % userName, 'I hope you\'re pleased with yourself. We could have all been killed, or worse... expelled!']
+SPELLING_ERROR = 'It\'s %s, not %s!'
+MUST_ENTER_INPUT = 'It appears you haven\'t asked a question. How do you expect me to perform any magic without a question?'
+NO_INFORMATION_AVAILABLE = 'Even Hogwarts a History couldn\'t answer that question. Perhaps try a different question.'
 
 ### CORE FUNCTIONALITY ###
 
@@ -88,7 +83,7 @@ class HermioneUI:
 		response = StringVar()
 		responseLabel = Label(gui, textvariable=response, anchor='nw', font=("Helvetica", 16), bg='white', fg='black', wraplength=200)
 		response.set(GREETING)
-		responseLabel.place(x=920, y=105, relwidth=.175, relheight=.425)	
+		responseLabel.place(x=925, y=105, relwidth=.175, relheight=.425)	
 
 		# User Text Area
 		userEntry = Text(gui, font=("Helvetica", 14), bg='white', bd=0, highlightcolor="white", fg='black')
@@ -138,11 +133,10 @@ def submitInput(userEntry, systemResponse, submitButton):
 		if intent == Intent.QUERY :
 			print("HERMIONE IS THINKING...")
 			response = deviseAnswer(tagged_input)
-		elif intent == Intent.STATEMENT :
-			print("HERMIONE IS VERIFYING...")
-			response = deviseRebuttle(tagged_input)
+			if response[0:3].lower() == 'he ' or response[0:4].lower() == 'she ' or response[0:5].lower() == 'they ':
+				response = "Well, %s%s" % (response[0].lower(), response[1:len(response)])
 		elif intent == Intent.NONSENSE :
-			print("HERMIONE THINKS YOU ARE UNCLEAR...")
+			print("HERMIONE THINKS YOU ARE UNCLEAR.")
 			response = "%s, %s" % (userName, RESPONSE_TO_NONSENSE[random.randint(0, len(RESPONSE_TO_NONSENSE)-1)])
 
 	systemResponse.set(response)
@@ -186,28 +180,16 @@ def isQuestion(taggedInput):
 
 	return False
 
-## This method checks that the POS-tagged input suggests that the user has input a statement
-## returns True or False
-##
-def isStatement(taggedInput):
-	
-	## First parse the information to find the NPs and verify that starts with NP followed by verb phrase
-	result = parser.parse(taggedInput)
-	subtrees = result.subtrees()
-	
-	i = 0
-	for subtree in subtrees:
-		if i == 1 and not subtree.label() == 'NP':
-			break
-		if i == 2 and subtree.label() == 'VP':
-			return True
-		i = i + 1
-
-	return False
-
-## TODO
+## This method takes as input the tagged user input and processes it to determine and appropriate response
+## returns an answer to the user's question
 ##
 def deviseAnswer(taggedInput):
+
+	# Before querying the wiki -- perform spell check!
+	for word in [word for word in taggedInput if len(word[0]) > 4]:
+		correctSpelling = spellCheck(word[0])
+		if not correctSpelling == word[0]:
+			return SPELLING_ERROR % (correctSpelling, word[0])
 
 	# Default Answer
 	answer = NO_INFORMATION_AVAILABLE
@@ -293,27 +275,51 @@ def deviseAnswer(taggedInput):
 		# If the search result did not return anything respond with no results respone 
 		if articleIDs:
 			answer = queryWikiaArticles(articleIDs, queries, additionalSearchKeywords) 
-		##else: TODO: Perform spell check
-
-	##else: TODO: Perform spell check
 
 	return answer
 
-
-## This method takes the POS-tagged user input, queries wikia and returns relevant information
-## If the user is correct --- an appropriate response is selected from a pre-defined list
-## If the user is incorrect --- an appropriate response is selected form a pre-defined list
-## If the answer is hazy (ie. low probability that the article matched the input) then system responds accordingly
-## If the article had something similar but not exact then the system responds with this refined result
-##
-def deviseRebuttle(taggedInput):
-	return 'You are correct'
-
-
-## TODO
+## This method takes as input a word and verifies the spelling based on pre-defined Harry Potter vocabulary
+## returns True if there is a spelling error
 ##
 def spellCheck(word):
-	pass
+	correctSpelling = correct(word)
+	if correctSpelling:
+		return correctSpelling
+	return 
+
+## The following code was taken from norvig.com/spell-correct.html
+## written by Peter Norvig explaining how Google spell check performs fast and efficient spell checking
+## hp-lexicon.txt --- Harry Potter vocabulary file with correct spellings of HP spells, made-up words and character names
+##
+def words(text): return re.findall('[a-zA-Z]+', text) 
+
+def train(features):
+    model = collections.defaultdict(lambda: 1)
+    for f in features:
+        model[f] += 1
+    return model
+
+NWORDS = train(words(file('hp-lexicon.txt').read()))
+
+alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+def edits1(word):
+   splits     = [(word[:i], word[i:]) for i in range(len(word) + 1)]
+   deletes    = [a + b[1:] for a, b in splits if b]
+   transposes = [a + b[1] + b[0] + b[2:] for a, b in splits if len(b)>1]
+   replaces   = [a + c + b[1:] for a, b in splits for c in alphabet if b]
+   inserts    = [a + c + b     for a, b in splits for c in alphabet]
+   return set(deletes + transposes + replaces + inserts)
+
+def known_edits2(word):
+    return set(e2 for e1 in edits1(word) for e2 in edits1(e1) if e2 in NWORDS)
+
+def known(words): return set(w for w in words if w in NWORDS)
+
+def correct(word):
+    candidates = known([word]) or known(edits1(word)) or known_edits2(word) or [word]
+    return max(candidates, key=NWORDS.get)
+
 
 ## API INTERFACING ##
 ## Section which provides the methods necessary to interface with the wikia API
@@ -365,8 +371,7 @@ def queryWikiaArticles(articleIDs, queries, searchRefinement):
 		resultData = json.load(results)
 		
 		answerWithScore = refineWikiaArticleContent(articleID[1], resultData, queries, searchRefinement)
-		print(answerWithScore[0])
-		print(answerWithScore[1])
+
 		if answerWithScore[1] > answerScore:
 			answerScore = answerWithScore[1]
 			answer = answerWithScore[0]
@@ -402,25 +407,25 @@ def refineWikiaArticleContent(specificQuery, articleData, queries, searchRefinem
 				## loop through refinements to see if they're in the sentence
 				for refinement in searchRefinement:
 					if refinement in sentence.rsplit(" "):
-							sentenceScore = sentenceScore + (1 * sentence.rsplit(" ").count(refinement))
-					if refinement in sentence:
-						sentenceScore = sentenceScore + 0.5
+							sentenceScore = sentenceScore + 0.5 + (sentence.rsplit(" ").count(refinement)/len(sentence))
+
 					for query in queries:
 						if ' '.join([query, refinement]) in sentence:
-							sentenceScore = sentenceScore + 0.5
+							sentenceScore = sentenceScore + 0.25
 						if ' '.join([refinement, query]) in sentence:
-							sentenceScore = sentenceScore + 0.5
+							sentenceScore = sentenceScore + 0.25
 
 				## loop through queries to see if they're in the sentence
 				for query in queries:
 					if query in sentence:
-						sentenceScore = sentenceScore + 1 + (0.25 * sentence.rsplit(" ").count(query))
+						sentenceScore = sentenceScore + 1 + (0.5 + sentence.count(query)/len(sentence))
 						if not query == specificQuery:
 							sentenceScore = sentenceScore + 0.5
 
+
 				## If score in top two re-adjust scores and sentences
 				if sentenceScore > secondSentenceScore:
-					if sentenceScore >= firstSentenceScore:
+					if sentenceScore > firstSentenceScore:
 						secondSentence = firstSentence
 						secondSentenceScore = firstSentenceScore
 						firstSentence = sentence
