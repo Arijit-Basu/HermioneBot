@@ -63,11 +63,11 @@ Statements will be handled for the final submission.
 1. Enter name -> Click "Reply"
 2. Ask a question adhering to the following syntax (as provided by the Penn Treebank POS tagger):
 	- Any phrase ending in a question mark '?':
-		- EXAMPLES: 
+		**Examples**: 
 			- ''
 			- ''
 	- Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)), Whose)
-		- EXAMPLES:
+		**Examples**:
 			- 'What is Harry Potter known for?'
 			- 'Who's Cedric?'
 			- 'When did Bellatrix escape from Azkaban?'
@@ -75,14 +75,15 @@ Statements will be handled for the final submission.
 			- 'Who is Parvati?'
 			- 'What is the Yule Ball?'
 	- Any phrase ending in a WH-pronoun:
-		- EXAMPLES:
+		**Examples**:
 			- ''
 	- Any phrase starting with a singular present verb or modal (Is, Does, Are, Can, Could, Should, Would, Were, Was, etc...)
-		- EXAMPLES:
+		**Examples**:
 			- 'Is Hufflepuff the kindest house?'
 			- '' 
 3. Type in nonsensical phrase or a statement-like sentence to receive Hermione-like remark
-4. Type in a question or statement with an incorrectly spelled HP-specific spell/ or character name:	
+4. Type in a question or statement with an incorrectly spelled HP-specific spell/ or character name:
+	**Examples**:	
 	- 'What is quiddich?' -> 'It's Quidditch, not quiddich!
 	- 'Who is Professor Quirel?' -> 'It's Quirrel, not Quirel!' 
 
