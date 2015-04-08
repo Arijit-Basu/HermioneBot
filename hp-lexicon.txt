@@ -1,17 +1,7 @@
-Adrian Pucey
 Alastor Moody
 Albus Dumbledore
-Alguff Awful
-Alice Longbottom
-Alicia Spinnet
-Ambrosius Flume
-Amelia Susan Bones
 Diggory
-Andrew Kirke
-Andromeda Blackv
-Andros Invincible
-Angelina Johnson
-Arabella Figg
+Andromeda
 Aragog
 Argus Filch
 Arnold
@@ -22,42 +12,28 @@ Belatrix Black
 Bellatrix Lestrange
 Bertha Jorkins
 Bertie
-Bill Weasly
 Birtha Jorkins
 Blaise Zabini
 Bloody Barron
-Ogden
 Borgin
 Bradley
 Buckbeak
-Cassius Warrington
 Cedric Diggory
-Charlie Weasley
 Chang
 Ciceron Harkis
-Colin Creevy
+Creevy
 Cormac McLaggen
 Cornelious Fudge
 Crookshanks
 Daphne Greengrass
-Dean Thomas
 Dedulus Diggle
 Dennis Creevey
-Derek
-Derrick
 Dobby
 Dolores Umbrige
 Draco Malfoy
 Duddly Dersly
 Eddie Carmichael
-Edgar Bones
 Egor Karkeroff
-Eleanor Branstone
-Eloise Midgeon
-Emma Dobbs
-Emmaline Vance
-Ernie Mcmillan
-Ernie Prang
 Errol
 Fenrir Greyback
 Filius Flitwick
@@ -66,17 +42,11 @@ Firenze
 Fleur Delacour
 Florean Fortesque
 Fluffy
-Frank Bryce
-Fred Weasley
-Gabrielle Delacour
-George Weasley
 Gildaroy Lockheart
 Ginny Weasley
 Godric Gryffindor
-Graham Pritchard
 Grawp
 Gregory Goyle
-Gwenog Jones
 Hannah Abbott
 Harry Potter
 Hecter Dagworth Granger
@@ -87,16 +57,11 @@ Hermione Granger
 Herold Dingle
 Humphrey Belcher
 Igor Karkaroff
-James Potter
 Justin Finch Flechly
-Katie
 Kingsley Shacklebolt
 Kreacher
-Laura Madley
-Lavender Brown
-Lee Jordan
-Lily Potter
-Lord Voldemort
+Lavender
+Voldemort
 Lucius Malfoy
 Ludovic Bagman
 Luna Lovegood
@@ -113,11 +78,8 @@ Marcus Belby
 Marcus Flint
 Marge Dursley
 Marietta Edgecome
-Marvalo Guant
-Mcnair
+Marvalo
 Merope Gaunt
-Mertal
-Micheal Corner
 Millicent Bagnold
 Millicent Bulstrode
 Minerva McGonagall
@@ -140,8 +102,6 @@ Nymphadora Tonks
 Olivander
 Oliver Wood
 Olympe Maxime
-Orla Quirke
-Otto Bagman
 Owen Cauldwell
 Padma Patil
 Pansy Parkinson
@@ -172,16 +132,12 @@ Rowena Ravenclaw
 Rubeus Hagrid
 Rufus Scrimgeour
 Salazar Slytherin
-Sally-Anne Perks
 Scabbers
 Seamus Finnigan
 Nicholas DeMimsey Porpington
-Sirius Black
-Susan Bones
+Sirius
 Bloody Barron
-Theodore Nott
 Riddle
-Trevor
 Urquhart
 Vernon Dursley
 Victoria Frobisher
@@ -193,6 +149,7 @@ Yvonne
 Quaffle
 Quidditch
 Hogwarts
+Gringotts
 Azkaban
 Quibbler
 Professor Quirrell 

@@ -152,8 +152,6 @@ def obtainUserIntent(taggedInput):
 	## then safely assume it is a question
 	if isQuestion(taggedInput):
 		intent = Intent.QUERY
-	elif isStatement(taggedInput):
-		intent = Intent.STATEMENT
 
 	return intent
 
@@ -260,6 +258,10 @@ def deviseAnswer(taggedInput):
 	# Remove any useless words from the keywords 
 	additionalSearchKeywords = [keyword.replace("'s", "") for keyword in additionalSearchKeywords]
 	
+	# Replace 'you' with 'Hermione' in queries and keywords
+	queries = [query.replace('you', 'Hermione Granger').replace('your', 'Hermione Granger\'s') for query in queries]
+	additionalSearchKeywords = [keyword.replace('you', 'Hermione Granger').replace('your', 'Hermione Granger\'s') for keyword in additionalSearchKeywords]
+
 	for query in queries:
 		additionalSearchKeywords = [keyword.replace(query, "") for keyword in additionalSearchKeywords]	
 	additionalSearchKeywords = [value for value in additionalSearchKeywords if value != ' ' and value != '']
@@ -378,7 +380,9 @@ def queryWikiaArticles(articleIDs, queries, searchRefinement):
 
 		if not answer: 
 			sentences = sent_tokenize(resultData['sections'][0]['content'][0]['text'].replace('b.', 'born'))
-			answer = ' '.join(sentences[0:2])
+
+			# Replace any keyword hinting at Hermione with the proper personal pronoun and if followed by 'is' replace with 'am'
+			answer = ' '.join(sentences[0:2]).replace('Hermione\'s', 'my').replace('Hermione Granger is', 'I am').replace('Hermione is', 'I am').replace('Hermione Granger', 'I').replace('Hermione', 'I')
 
 	
 	return answer
