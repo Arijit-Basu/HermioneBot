@@ -71,37 +71,37 @@ Statements will be handled for the final submission.
 	- Any phrase ending in a question mark '?':
 	
 	**Examples**: 
-		- ''
-		- ''
+	- ''
+	- ''
 	
-	- Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)), Whose)
+	- Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)))
 		
 	**Examples**:
-		- 'What is Harry Potter known for?'
-		- 'Who's Cedric?'
-		- 'Who was Cho Chang?'
-		- 'When did Bellatrix escape from Azkaban?'
-		- 'Who is the love of Hermione's life?'
-		- 'Who is Parvati?'
-		- 'What is the Yule Ball?'
-		- 'Who is Moaning Myrtle?'
-		- 'Where is Gringotts?'
-		- 'Where is Hogwarts located?'
-		- 'What is the Tale of Three Brothers?'
-		- 'Who are Death Eaters?'
-		- 'What are the Unforgivable Spells?'
-		- 'Who transformed into Scabbers?'
+	- 'What is Harry Potter known for?'
+	- 'Who's Cedric?'
+	- 'Who was Cho Chang?'
+	- 'When did Bellatrix escape from Azkaban?'
+	- 'Who is the love of Hermione's life?'
+	- 'Who is Parvati?'
+	- 'What is the Yule Ball?'
+	- 'Who is Moaning Myrtle?'
+	- 'Where is Gringotts?'
+	- 'Where is Hogwarts located?'
+	- 'What is the Tale of Three Brothers?'
+	- 'Who are Death Eaters?'
+	- 'What are the Unforgivable Spells?'
+	- 'Who transformed into Scabbers?'
 	
 	- Any phrase ending in a WH-pronoun:
 	
 	**Examples**:
-		- ''
+	- ''
 	
 	- Any phrase starting with a singular present verb or modal (Is, Does, Are, Can, Could, Should, Would, Were, Was, etc...)
 
 	**Examples**:
-		- 'Is Hufflepuff the kindest house?'
-		- '' 
+	- 'Is Hufflepuff the kindest house?'
+	- '' 
 
 3. Type in nonsensical phrase or a statement-like sentence to receive Hermione-like remark
 
@@ -115,8 +115,8 @@ Statements will be handled for the final submission.
 	- 'What is quiddich?' -> 'It's Quidditch, not quiddich!
 	- 'Who is Professor Quirel?' -> 'It's Quirrel, not Quirel!' 
 	- 'What is Wingardium Leviosar?' -> 'It's Leviosa, not Leviosar!'
-	-
-	-
+	- ''
+	- ''
 
 ### Remarks
 This is a largely probabilistic model which doesn't always obtain optimal results, for many queries, where there exists a wikia article containing a high occurence of relevant information/keywords based on that query, it will return the answer or related information.  However, this does not always happen.  The problem space is very large and there are many more optimizations and refinements that could be made to improve the system. Although, given the time and resource constraint I am satisfied with what I've been able to achieve and learn from this project thus far.
