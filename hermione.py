@@ -37,13 +37,14 @@ class Intent:
 	DEVIOUS = 4
 
 grammar = r"""
-	NP: {<DT|PRP\$>?<JJ>*<NN|NNS>+}
-		{<NNP|NNPS><IN><NNP|NNPS>}
+	NP: {<DT|PRP\$>?<JJ|JJS>*<NN|NNS>+}
+		{<NNP|NNPS><IN><DT>?<NNP|NNPS>}
 		{<NNP|NNPS>+}
 		{<PRP>}
 		{<JJ>+}
 		{<WP|WP\s$|WRB>}
 	VP: {<VB|VBD|VBG|VBN|VBP|VBZ|MD><NP|IN>?}
+	PP: {<IN><NN|NNS|NNP|NNPS|CD>}
 """
 parser = RegexpParser(grammar)
 
@@ -259,12 +260,26 @@ def deviseAnswer(taggedInput):
 	additionalSearchKeywords = [keyword.replace("'s", "") for keyword in additionalSearchKeywords]
 	
 	# Replace 'you' with 'Hermione' in queries and keywords
-	queries = [query.replace('you', 'Hermione Granger').replace('your', 'Hermione Granger\'s') for query in queries]
-	additionalSearchKeywords = [keyword.replace('you', 'Hermione Granger').replace('your', 'Hermione Granger\'s') for keyword in additionalSearchKeywords]
+	addHermioneQuery = False
+	
+	for query in queries:
+		if 'your' in query or 'you' in query:
+			addHermioneQuery = True
+
+	for keyword in additionalSearchKeywords:
+		if 'your' in keyword or 'you' in keyword:
+			addHermioneQuery = True
+
+	queries = [query.replace('your', '').replace('you', '') for query in queries]
+	additionalSearchKeywords = [keyword.replace('your', '').replace('you', '') for keyword in additionalSearchKeywords]
+
+	if addHermioneQuery:
+		queries.append('Hermione Granger')
 
 	for query in queries:
 		additionalSearchKeywords = [keyword.replace(query, "") for keyword in additionalSearchKeywords]	
 	additionalSearchKeywords = [value for value in additionalSearchKeywords if value != ' ' and value != '']
+	queries = [value for value in queries if value != '']
 
 	print("Wikia Queries : %s " % queries)
 	print("Search Keywords : %s " % additionalSearchKeywords)
@@ -278,6 +293,7 @@ def deviseAnswer(taggedInput):
 		if articleIDs:
 			answer = queryWikiaArticles(articleIDs, queries, additionalSearchKeywords) 
 
+	print("Hermione's Response: %s" % answer)
 	return answer
 
 ## This method takes as input a word and verifies the spelling based on pre-defined Harry Potter vocabulary
@@ -343,9 +359,12 @@ def queryWikiaSearch(queries):
 		searchUrl += urllib.urlencode(SEARCH_QUERY_TEMPLATE)
 	
 		# Open URL and fetch json response data
-		results = urllib2.urlopen(searchUrl)
-		resultData = json.load(results)
-	
+		try:
+			results = urllib2.urlopen(searchUrl)
+			resultData = json.load(results)
+		except HTTPError: 
+			continue
+
 		# If there is a response then take the first result article
 		# and return the url
 		if resultData['total'] > 0 :
@@ -378,12 +397,22 @@ def queryWikiaArticles(articleIDs, queries, searchRefinement):
 			answerScore = answerWithScore[1]
 			answer = answerWithScore[0]
 
-		if not answer: 
-			sentences = sent_tokenize(resultData['sections'][0]['content'][0]['text'].replace('b.', 'born'))
+			# If response has to do with Hermione replace 3rd person pronouns with 1st person pronouns
+			for query in queries:
+				if 'Hermione' in query.rsplit(" "):
+					answer.replace('she', 'I').replace('her', 'my')
 
 			# Replace any keyword hinting at Hermione with the proper personal pronoun and if followed by 'is' replace with 'am'
-			answer = ' '.join(sentences[0:2]).replace('Hermione\'s', 'my').replace('Hermione Granger is', 'I am').replace('Hermione is', 'I am').replace('Hermione Granger', 'I').replace('Hermione', 'I')
+			answer = answer.replace('Hermione\'s', 'my').replace('Hermione Granger is', 'I am').replace('Hermione is', 'I am').replace('Hermione Jean Granger', 'I').replace('Hermione Granger', 'I').replace('Hermione', 'I')
 
+		if not answer: 
+			try:
+				sentences = sent_tokenize(resultData['sections'][0]['content'][0]['text'].replace('b.', 'born'))
+				# Replace any keyword hinting at Hermione with the proper personal pronoun and if followed by 'is' replace with 'am'
+				answer = ' '.join(sentences[0:2]).replace('Hermione\'s', 'my').replace('Hermione Granger is', 'I am').replace('Hermione is', 'I am').replace('Hermione Jean Granger', 'I').replace('Hermione Granger', 'I').replace('Hermione', 'I')
+
+			except IndexError:
+				continue
 	
 	return answer
 
@@ -405,15 +434,18 @@ def refineWikiaArticleContent(specificQuery, articleData, queries, searchRefinem
 			## fetch text and loop through sentences
 			if not 'text' in content:
 				continue
+			
 			for sentence in sent_tokenize(content['text'].replace('b.', 'born')):
 				sentenceScore = 0
 
 				## loop through refinements to see if they're in the sentence
 				for refinement in searchRefinement:
-					if refinement in sentence.rsplit(" "):
-							sentenceScore = sentenceScore + 0.5 + (sentence.rsplit(" ").count(refinement)/len(sentence))
+					
+					if refinement in sentence:
+							sentenceScore = sentenceScore + 0.5 + (sentence.count(refinement)/len(sentence.rsplit(" ")))
 
 					for query in queries:
+						
 						if ' '.join([query, refinement]) in sentence:
 							sentenceScore = sentenceScore + 0.25
 						if ' '.join([refinement, query]) in sentence:
@@ -421,10 +453,15 @@ def refineWikiaArticleContent(specificQuery, articleData, queries, searchRefinem
 
 				## loop through queries to see if they're in the sentence
 				for query in queries:
+					
 					if query in sentence:
-						sentenceScore = sentenceScore + 1 + (0.5 + sentence.count(query)/len(sentence))
+						sentenceScore = sentenceScore + 1 + sentence.count(query)/len(sentence.rsplit(" "))
 						if not query == specificQuery:
 							sentenceScore = sentenceScore + 0.5
+					
+					for word in query.split(" "):
+						if word in sentence:
+							sentenceScore = sentenceScore + 1/len(queries)
 
 
 				## If score in top two re-adjust scores and sentences
@@ -439,7 +476,7 @@ def refineWikiaArticleContent(specificQuery, articleData, queries, searchRefinem
 						secondSentenceScore = sentenceScore
 
 	if firstSentence:
-		if len(firstSentence) > 150 or secondSentenceScore < firstSentenceScore:
+		if len(firstSentence) + len(secondSentence) > 250 or secondSentenceScore < firstSentenceScore:
 			secondSentence = ''
 			secondSentenceScore == 0
 		return [' '.join([firstSentence, secondSentence]), firstSentenceScore + secondSentenceScore]

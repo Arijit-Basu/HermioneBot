@@ -3,26 +3,13 @@ Albus Dumbledore
 Diggory
 Andromeda
 Aragog
-Argus Filch
-Arnold
-Arthur Weasley
-Augusta Longbottom
+Weasley
+Longbottom
 Bartemius Crouch
-Belatrix Black
+Belatrix
 Bellatrix Lestrange
-Bertha Jorkins
-Bertie
-Birtha Jorkins
-Blaise Zabini
-Bloody Barron
-Borgin
-Bradley
 Buckbeak
 Cedric Diggory
-Chang
-Ciceron Harkis
-Creevy
-Cormac McLaggen
 Cornelious Fudge
 Crookshanks
 Daphne Greengrass
@@ -34,7 +21,6 @@ Draco Malfoy
 Duddly Dersly
 Eddie Carmichael
 Egor Karkeroff
-Errol
 Fenrir Greyback
 Filius Flitwick
 Finius Nigelus
@@ -46,20 +32,15 @@ Gildaroy Lockheart
 Ginny Weasley
 Godric Gryffindor
 Grawp
-Gregory Goyle
+Gregory
 Hannah Abbott
 Harry Potter
-Hecter Dagworth Granger
 Hedwig
 Helga Hufflepuff
-Herbert Chorley
 Hermione Granger
-Herold Dingle
-Humphrey Belcher
 Igor Karkaroff
 Justin Finch Flechly
 Kingsley Shacklebolt
-Kreacher
 Lavender
 Voldemort
 Lucius Malfoy
@@ -67,7 +48,6 @@ Ludovic Bagman
 Luna Lovegood
 Madam Hooch
 Madam Malkin
-Madam Pince
 Madam Pomfrey
 Madam Rosmerta
 Maddam Maxime
@@ -85,7 +65,6 @@ Millicent Bulstrode
 Minerva McGonagall
 Professor McGonnagall
 Moaning Myrtle
-Molly Weasley
 Montague
 Morfin Gaunt
 Ollivander
@@ -98,13 +77,8 @@ Nicholas Flamel
 Nimphodorah Tonks
 Norbert
 Theodore
-Nymphadora Tonks
+Nymphadora
 Olivander
-Oliver Wood
-Olympe Maxime
-Owen Cauldwell
-Padma Patil
-Pansy Parkinson
 Parvati Patil
 Peeves
 Penelope Clearwater
@@ -113,15 +87,13 @@ Pertunia Dursly
 Peter Petigrue
 Petunia Dursley
 Pigwigeon
-Professor Binns
 Professor Flitwick
-Professor Grubbly-Plank
 Professor Lockhart
 Professor Quirell
 Professor Slughorn
-Professor Severus Snape
+Severus Snape
 Professor Sprout
-Professor Trelwaney
+Professor Trelawney
 Professor Vecter
 Professor Dippet
 Remus Lupin
@@ -136,11 +108,9 @@ Scabbers
 Seamus Finnigan
 Nicholas DeMimsey Porpington
 Sirius
-Bloody Barron
 Riddle
 Urquhart
 Vernon Dursley
-Victoria Frobisher
 Viktor Krum
 Vincent Crabbe
 Violet
@@ -175,7 +145,6 @@ Episkey
 Evanesco
 Expecto Patronum
 Expelliarmus
-Fera Verto
 Ferula
 Fidelius
 Finite Incantatem
@@ -193,14 +162,12 @@ Incendio
 Legilimens
 Levicorpus
 Liberacorpus
-Locomotor Mortis
 Lumos
 Mobiliarbus
 Mobilicorpus
 Morsmordre
 Morsmorde
 Muffliato
-Nox
 Obliviate
 Orchideous
 Petrificus Totalus
