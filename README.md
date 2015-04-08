@@ -68,13 +68,13 @@ Statements will be handled for the final submission.
 ### Happy Path:
 1. Enter name -> Click "Reply"
 2. Ask a question adhering to the following syntax (as provided by the Penn Treebank POS tagger):
-	- Any phrase ending in a question mark '?':
+	**I.** Any phrase ending in a question mark '?':
 	
 	**Examples**: 
 	- ''
 	- ''
 	
-	- Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)))
+	**II.** Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)))
 		
 	**Examples**:
 	- 'What is Harry Potter known for?'
@@ -92,12 +92,12 @@ Statements will be handled for the final submission.
 	- 'What are the Unforgivable Spells?'
 	- 'Who transformed into Scabbers?'
 	
-	- Any phrase ending in a WH-pronoun:
+	**III.** Any phrase ending in a WH-pronoun:
 	
 	**Examples**:
 	- ''
 	
-	- Any phrase starting with a singular present verb or modal (Is, Does, Are, Can, Could, Should, Would, Were, Was, etc...)
+	**IV.** Any phrase starting with a singular present verb or modal (Is, Does, Are, Can, Could, Should, Would, Were, Was, etc...)
 
 	**Examples**:
 	- 'Is Hufflepuff the kindest house?'
