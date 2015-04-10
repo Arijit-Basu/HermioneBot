@@ -299,7 +299,7 @@ def deviseAnswer(taggedInput):
 				filler = RESPONSE_STARTERS[random.randint(0, len(RESPONSE_STARTERS)-1)]
 				if filler:
 
-					if pos_tag(word_tokenize(answer))[0][1] == 'NNP':
+					if pos_tag(word_tokenize(answer))[0][1] == 'NNP' or word_tokenize(answer)[0] == 'I':
 						first = answer[0]
 					else:
 						first = answer[0].lower()
@@ -308,14 +308,18 @@ def deviseAnswer(taggedInput):
 
 			# Remove Parentheses in answer
 			tempAnswer = ''  
-			removeText = 0	
+			removeText = 0
+			removeSpace = False	
 			for i in answer:
-				if i == '(':
+				if removeSpace:
+					removeSpace = False
+				elif i == '(':
 					removeText = removeText + 1
 				elif removeText == 0:
 					tempAnswer+=i
 				elif i == ')':
 					removeText = removeText - 1
+					removeSpace = True
 
 			answer = tempAnswer
 
@@ -427,7 +431,7 @@ def queryWikiaArticles(articleIDs, queries, searchRefinement):
 			# If response has to do with Hermione replace 3rd person pronouns with 1st person pronouns
 			for query in queries:
 				if 'Hermione' in query.rsplit(" "):
-					answer.replace('she', 'I').replace('her', 'my')
+					answer = answer.replace('she', 'I').replace('her', 'my')
 
 			# Replace any keyword hinting at Hermione with the proper personal pronoun and if followed by 'is' replace with 'am'
 			answer = answer.replace('Hermione\'s', 'my').replace('Hermione Granger is', 'I am').replace('Hermione is', 'I am').replace('Hermione Jean Granger', 'I').replace('Hermione Granger', 'I').replace('Hermione', 'I')

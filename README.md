@@ -79,6 +79,7 @@ Statements will be handled for the final submission.
 	**II.** Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)))
 		
 	**Examples**:
+	- 'Who's Harry Potter?'
 	- 'What's Harry Potter known as?'
 	- 'What's a house elf?'
 	- 'Who's Cedric?'
@@ -122,7 +123,7 @@ Statements will be handled for the final submission.
 
 	**Examples**:
 	- 'Who are you?'
-	- 'Who is the love of your life?'
+	- 'Who was the love of your life?'
 	- 'When did you, Harry and Ron become best friends?'
 
 3. Type in nonsensical phrase or a statement-like sentence to receive Hermione-like remark
