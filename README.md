@@ -65,6 +65,8 @@ Statements will be handled for the final submission.
 		- uses split, replace, transpose, delete, insert operations
 		- returns word with high probability of having been mispelled by the user
 
+	**note:** you can follow Hermione's computation as many of the system inputs and intermediate states are logged in the terminal
+
 ### Happy Path:
 1. Enter name -> Click "Reply"
 2. Ask a question adhering to the following syntax (as provided by the Penn Treebank POS tagger):
@@ -77,7 +79,7 @@ Statements will be handled for the final submission.
 	**II.** Any phrase starting with a WH-pronoun or adverb (What('s), Who('s), Where('s), When('s), Why('s), How('s)))
 		
 	**Examples**:
-	- 'What is Harry Potter known for?'
+	- 'What's Harry Potter known as?'
 	- 'What's a house elf?'
 	- 'Who's Cedric?'
 	- 'Who was Cho Chang?'
@@ -95,9 +97,8 @@ Statements will be handled for the final submission.
 	- 'Where is Hogwarts located?'
 	- 'What is the Tale of Three Brothers?'
 	- 'Who are Death Eaters?'
-	- 'What are the Unforgivable Spells?'
 	- 'Who transformed into Scabbers?'
-	- 'What are the names of Harry's children?'
+	- 'What did Harry do after the war?'
 	- 'What is Grawp?'
 	- 'What does creating a horcrux do?'
 	- 'What's Divination?'
@@ -115,8 +116,9 @@ Statements will be handled for the final submission.
 	- 'Is Hufflepuff the kindest house?'
 	- 'Are you friends with Harry Potter?' 
 	- 'Does every spell require a wand?'
+	- 'Can you tell me about the Marauders Map?'
 
-	**V.** Questions directed at Hermione in 1st person
+	**V.** Questions directed at Hermione in 2nd person
 
 	**Examples**:
 	- 'Who are you?'

@@ -43,7 +43,7 @@ grammar = r"""
 		{<PRP>}
 		{<JJ>+}
 		{<WP|WP\s$|WRB>}
-	VP: {<VB|VBD|VBG|VBN|VBP|VBZ|MD><NP|IN>?}
+	VP: {<VB|VBD|VBG|VBN|VBP|VBZ|MD><NP>?}
 	PP: {<IN><NN|NNS|NNP|NNPS|CD>}
 """
 parser = RegexpParser(grammar)
@@ -51,10 +51,11 @@ parser = RegexpParser(grammar)
 ## Pre-defined responses to statements and undecipherable user questions
 GREETING = 'I\'m Hermione Granger and you are?'
 WELCOME = 'Pleasure.'
-RESPONSE_TO_NONSENSE = ['I\'m sorry but that is simply not a question!', 'Is that a real question. Well it\'s not very good now is it?', 'Honestly %s, that is not funny, you\'re lucky I don\'t report you to the headmaster' % userName, 'I hope you\'re pleased with yourself. We could have all been killed, or worse... expelled!']
+RESPONSE_TO_NONSENSE = ['I\'m sorry but that is simply not a question!', 'is that a real question? Well it\'s not very good now is it?', 'honestly, that is not funny, you\'re lucky I don\'t report you to the headmaster!', 'I hope you\'re pleased with yourself. Your comments could get us all killed, or worse... expelled!']
 SPELLING_ERROR = 'It\'s %s, not %s!'
 MUST_ENTER_INPUT = 'It appears you haven\'t asked a question. How do you expect me to perform any magic without a question?'
 NO_INFORMATION_AVAILABLE = 'Even \"Hogwarts: A History\" couldn\'t answer that question. Perhaps try a different question.'
+RESPONSE_STARTERS = ['', 'You see, ', 'I know that ', 'I believe that ', 'It is said that ', 'To my knowledge, ']
 
 ### CORE FUNCTIONALITY ###
 
@@ -82,7 +83,7 @@ class HermioneUI:
 
 		# Response Text Area
 		response = StringVar()
-		responseLabel = Label(gui, textvariable=response, anchor='nw', font=("Helvetica", 16), bg='white', fg='black', wraplength=200)
+		responseLabel = Label(gui, textvariable=response, anchor='nw', font=("Helvetica", 18), bg='white', fg='black', wraplength=200)
 		response.set(GREETING)
 		responseLabel.place(x=925, y=105, relwidth=.175, relheight=.425)	
 
@@ -134,8 +135,6 @@ def submitInput(userEntry, systemResponse, submitButton):
 		if intent == Intent.QUERY :
 			print("HERMIONE IS THINKING...")
 			response = deviseAnswer(tagged_input)
-			if response[0:3].lower() == 'he ' or response[0:4].lower() == 'she ' or response[0:5].lower() == 'they ':
-				response = "Well, %s%s" % (response[0].lower(), response[1:len(response)])
 		elif intent == Intent.NONSENSE :
 			print("HERMIONE THINKS YOU ARE UNCLEAR.")
 			response = "%s, %s" % (userName, RESPONSE_TO_NONSENSE[random.randint(0, len(RESPONSE_TO_NONSENSE)-1)])
@@ -292,6 +291,34 @@ def deviseAnswer(taggedInput):
 		# If the search result did not return anything respond with no results respone 
 		if articleIDs:
 			answer = queryWikiaArticles(articleIDs, queries, additionalSearchKeywords) 
+			
+			# Add custom response starters
+			if answer[0:3].lower() == 'he ' or answer[0:4].lower() == 'she ' or answer[0:5].lower() == 'they ':
+				answer = "Well, %s%s" % (answer[0].lower(), answer[1:])
+			else: 
+				filler = RESPONSE_STARTERS[random.randint(0, len(RESPONSE_STARTERS)-1)]
+				if filler:
+
+					if pos_tag(word_tokenize(answer))[0][1] == 'NNP':
+						first = answer[0]
+					else:
+						first = answer[0].lower()
+
+					answer = "%s%s%s" % (filler, first, answer[1:])
+
+			# Remove Parentheses in answer
+			tempAnswer = ''  
+			removeText = 0	
+			for i in answer:
+				if i == '(':
+					removeText = removeText + 1
+				elif removeText == 0:
+					tempAnswer+=i
+				elif i == ')':
+					removeText = removeText - 1
+
+			answer = tempAnswer
+
 
 	print("Hermione's Response: %s" % answer)
 	return answer
@@ -362,7 +389,7 @@ def queryWikiaSearch(queries):
 		try:
 			results = urllib2.urlopen(searchUrl)
 			resultData = json.load(results)
-		except HTTPError: 
+		except urllib2.HTTPError: 
 			continue
 
 		# If there is a response then take the first result article
@@ -476,7 +503,7 @@ def refineWikiaArticleContent(specificQuery, articleData, queries, searchRefinem
 						secondSentenceScore = sentenceScore
 
 	if firstSentence:
-		if len(firstSentence) + len(secondSentence) > 250 or secondSentenceScore < firstSentenceScore:
+		if len(firstSentence) + len(secondSentence) > 200 or secondSentenceScore < firstSentenceScore:
 			secondSentence = ''
 			secondSentenceScore == 0
 		return [' '.join([firstSentence, secondSentence]), firstSentenceScore + secondSentenceScore]
