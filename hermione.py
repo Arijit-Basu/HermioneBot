@@ -55,7 +55,7 @@ RESPONSE_TO_NONSENSE = ['I\'m sorry but that is simply not a question!', 'is tha
 SPELLING_ERROR = 'It\'s %s, not %s!'
 MUST_ENTER_INPUT = 'It appears you haven\'t asked a question. How do you expect me to perform any magic without a question?'
 NO_INFORMATION_AVAILABLE = 'Even \"Hogwarts: A History\" couldn\'t answer that question. Perhaps try a different question.'
-RESPONSE_STARTERS = ['', 'You see, ', 'I know that ', 'I believe that ', 'It is said that ', 'To my knowledge, ']
+RESPONSE_STARTERS = ['', 'Well, ' 'You see, ', 'I know that ', 'I believe that ', 'It is said that ', 'To my knowledge, ']
 
 ### CORE FUNCTIONALITY ###
 
@@ -85,11 +85,11 @@ class HermioneUI:
 		response = StringVar()
 		responseLabel = Label(gui, textvariable=response, anchor='nw', font=("Helvetica", 18), bg='white', fg='black', wraplength=200)
 		response.set(GREETING)
-		responseLabel.place(x=925, y=105, relwidth=.175, relheight=.425)	
+		responseLabel.place(x=925, y=115, relwidth=.175, relheight=.400)	
 
 		# User Text Area
 		userEntry = Text(gui, font=("Helvetica", 14), bg='white', bd=0, highlightcolor="white", fg='black')
-		userEntry.place(x=950, y=525, relwidth=.15, relheight=.1)
+		userEntry.place(x=950, y=535, relwidth=.15, relheight=.1)
 		submitButton = Button(gui, text="Reply", command= lambda: submitInput(userEntry, response, submitButton))
 		submitButton.place(x=990, y=600)
 		gui.mainloop()
@@ -212,7 +212,7 @@ def deviseAnswer(taggedInput):
 
 	queryPhraseType = 3
 
-	## Helper Information
+	## Helper POS Tag Information to define the question phrase type
 	firstWordTag = taggedInput[0][1]
 	lastToken = taggedInput[len(taggedInput)-1][0]
 	lastWordTag = taggedInput[len(taggedInput)-1][1]
@@ -235,30 +235,32 @@ def deviseAnswer(taggedInput):
 			i = i + 1
 			continue
 		
-		if queryPhraseType == 2 or queryPhraseType == 1:
-			if i == 1:
+		# Skip the first NP found if question starts with WH-NP or auxiliary VP
+		if (queryPhraseType == 2 or queryPhraseType == 1) and i == 1:
 				i = i + 1
 				continue
-			elif subtree.label() == 'NP':
-				queries.append(' '.join([str(a[0]) for a in subtree.leaves()]))
-			else:
-				additionalSearchKeywords.append(' '.join([str(a[0]) for a in subtree.leaves()])) 
 
+		# Add NP to list of queries
+		if subtree.label() == 'NP':
+			queries.append(' '.join([str(a[0]) for a in subtree.leaves()]))
+
+		# Add VP and PPs to additional search keywords
 		else:
-			if subtree.label() == 'NP':
-				queries.append(' '.join([str(a[0]) for a in subtree.leaves()]))
-			elif not i == 0:
-				additionalSearchKeywords.append(' '.join([str(a[0]) for a in subtree.leaves()]))
+			additionalSearchKeywords.append(' '.join([str(a[0]) for a in subtree.leaves()])) 
 
 		i = i + 1
 
+
+	## Perform additional refinements to the list of queries and keywords
+
+	# Refinement 1. If question phrase ends in WH-noun remove the last query
 	if (queryPhraseType == 3 and len(queries) > 1) and (lastWordTag.startswith('W') or secondLastWordTag.startswith('W')) :
 		queries = queries[0:len(queries)-1]
 
-	# Remove any useless words from the keywords 
+	# Refinement 2. Remove posseive affix from keywords if it exists
 	additionalSearchKeywords = [keyword.replace("'s", "") for keyword in additionalSearchKeywords]
 	
-	# Replace 'you' with 'Hermione' in queries and keywords
+	# Refinement 3. Replace 'you' and 'your' with 'Hermione Granger' in queries and keywords
 	addHermioneQuery = False
 	
 	for query in queries:
@@ -275,38 +277,40 @@ def deviseAnswer(taggedInput):
 	if addHermioneQuery:
 		queries.append('Hermione Granger')
 
+	# Refinement 4. Remove query terms from additionalSearchKeywords to avoid duplication
 	for query in queries:
 		additionalSearchKeywords = [keyword.replace(query, "") for keyword in additionalSearchKeywords]	
+	
+	# Refinement 5. Remove empty strings from queries and additionalSearchKeywords
 	additionalSearchKeywords = [value for value in additionalSearchKeywords if value != ' ' and value != '']
 	queries = [value for value in queries if value != '']
 
 	print("Wikia Queries : %s " % queries)
 	print("Search Keywords : %s " % additionalSearchKeywords)
 
+	## If there are queries perform wikia search 
+	## for articles and scan through article text for a relevant response
 	if queries:
 
 		# First query wikia to get possible matching articles
 		articleIDs = queryWikiaSearch(queries)
 	
-		# If the search result did not return anything respond with no results respone 
+		## If the search result returned articleIDs matching the query then scan them
+		## and then refine the optimal result returned to appear more human 
 		if articleIDs:
 			answer = queryWikiaArticles(articleIDs, queries, additionalSearchKeywords) 
 			
-			# Add custom response starters
-			if answer[0:3].lower() == 'he ' or answer[0:4].lower() == 'she ' or answer[0:5].lower() == 'they ':
-				answer = "Well, %s%s" % (answer[0].lower(), answer[1:])
-			else: 
-				filler = RESPONSE_STARTERS[random.randint(0, len(RESPONSE_STARTERS)-1)]
-				if filler:
+			# Refinement 1. Append the response to a random response prefix
+			filler = RESPONSE_STARTERS[random.randint(0, len(RESPONSE_STARTERS)-1)]
+			if filler:
+				if pos_tag(word_tokenize(answer))[0][1] == 'NNP' or word_tokenize(answer)[0] == 'I':
+					first = answer[0]
+				else:
+					first = answer[0].lower()
 
-					if pos_tag(word_tokenize(answer))[0][1] == 'NNP' or word_tokenize(answer)[0] == 'I':
-						first = answer[0]
-					else:
-						first = answer[0].lower()
+				answer = "%s%s%s" % (filler, first, answer[1:])
 
-					answer = "%s%s%s" % (filler, first, answer[1:])
-
-			# Remove Parentheses in answer
+			# Refinement 2. Remove Parentheses in answer
 			tempAnswer = ''  
 			removeText = 0
 			removeSpace = False	
@@ -412,6 +416,7 @@ def queryWikiaArticles(articleIDs, queries, searchRefinement):
 	answerScore = 0
 
 	for articleID in articleIDs:
+		
 		# Format Article URL
 		ARTICLE_QUERY_TEMPLATE['id'] = articleID[0]
 		articleUrl = WIKIA_API_URL
@@ -422,6 +427,7 @@ def queryWikiaArticles(articleIDs, queries, searchRefinement):
 		results = urllib2.urlopen(articleUrl)
 		resultData = json.load(results)
 		
+		# Select the top scoring sentences from the article and compare with pre-existing top answer
 		answerWithScore = refineWikiaArticleContent(articleID[1], resultData, queries, searchRefinement)
 
 		if answerWithScore[1] > answerScore:
@@ -436,6 +442,7 @@ def queryWikiaArticles(articleIDs, queries, searchRefinement):
 			# Replace any keyword hinting at Hermione with the proper personal pronoun and if followed by 'is' replace with 'am'
 			answer = answer.replace('Hermione\'s', 'my').replace('Hermione Granger is', 'I am').replace('Hermione is', 'I am').replace('Hermione Jean Granger', 'I').replace('Hermione Granger', 'I').replace('Hermione', 'I')
 
+		# If there is no answer then take the first two sentences from the article as a relevant answer
 		if not answer: 
 			try:
 				sentences = sent_tokenize(resultData['sections'][0]['content'][0]['text'].replace('b.', 'born'))
@@ -506,6 +513,7 @@ def refineWikiaArticleContent(specificQuery, articleData, queries, searchRefinem
 						secondSentence = sentence
 						secondSentenceScore = sentenceScore
 
+	# If an answer was found determine an appropriate response length and return the answer and score
 	if firstSentence:
 		if len(firstSentence) + len(secondSentence) > 200 or secondSentenceScore < firstSentenceScore:
 			secondSentence = ''
