@@ -129,10 +129,10 @@ Statements will be handled for the final submission.
 
 3. Type in nonsensical phrase or a statement-like sentence to receive Hermione-like remark
 
-	**Example**: (enter mulltiple times for different retorts)
+	**Example**: (enter multiple times for different retorts)
 	- 'I like Harry Potter.' 
 
-4. Type in a question or statement with an incorrectly spelled HP-specific spell/ or character name:
+4. Type in a question or statement with an incorrectly spelled HP-specific spell or character name:
 	
 	**Examples**:	
 	- 'What is quiddich?' -> 'It's Quidditch, not quiddich!
