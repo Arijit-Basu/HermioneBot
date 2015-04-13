@@ -114,7 +114,8 @@ Statements will be handled for the final submission.
 	**IV.** Any phrase starting with a singular present verb or modal (Is, Does, Are, Can, Could, Should, Would, Were, Was, etc...)
 
 	**Examples**:
-	- 'Is Hufflepuff the kindest house?'
+	- 'Was Mr. Ollivander a wand maker?'
+	- 'Is Gryffindor the bravest house?'
 	- 'Are you friends with Harry Potter?' 
 	- 'Does every spell require a wand?'
 	- 'Can you tell me about the Marauders Map?'
